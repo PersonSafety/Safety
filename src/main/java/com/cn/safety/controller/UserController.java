@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cn.safety.model.ResultData;
+import com.cn.safety.model.UserRequest;
 import com.cn.safety.pojo.User;
 import com.cn.safety.service.IUserService;
 
@@ -56,9 +58,9 @@ public class UserController {
      */  
     @RequestMapping(value = "/add", method = RequestMethod.POST)  
     @ResponseBody  
-    public ResultData<DishesCook> add(@RequestBody DishesCookRequest requestData,  
+    public ResultData<User> add(@RequestBody UserRequest requestData,  
             Model mode, HttpServletResponse response) throws IOException {        
-        ResultData<DishesCook> resultData =new ResultData<DishesCook>();  
+        ResultData<User> resultData =new ResultData<User>();  
         resultData.setStatus(0);  
         resultData.setData(null);  
         if (requestData==null) {              
@@ -66,7 +68,7 @@ public class UserController {
         } else {              
             //身份验证处理  
             try {  
-                int i=dishesCookService.insert(requestData.getDishesCook());  
+                int i=userService.insert(requestData.getUserName());  
                 if (i==1){  
                     resultData.setStatus(1);  
                     resultData.setMessage("添加成功");  
