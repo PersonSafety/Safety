@@ -56,10 +56,9 @@ public class UserController {
      * @return 
      * @throws IOException 
      */  
-    @RequestMapping(value = "/add", method = RequestMethod.POST)  
+    @RequestMapping(value = "/add", method = RequestMethod.POST,consumes = "application/json")  
     @ResponseBody  
-    public ResultData<User> add(@RequestBody UserRequest requestData,  
-            Model mode, HttpServletResponse response) throws IOException {        
+    public ResultData<User> add(@RequestBody UserRequest requestData) throws IOException {        
         ResultData<User> resultData =new ResultData<User>();  
         resultData.setStatus(0);  
         resultData.setData(null);  
