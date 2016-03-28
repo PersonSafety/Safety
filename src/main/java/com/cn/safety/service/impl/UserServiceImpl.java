@@ -20,6 +20,11 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public int insert(String name) {
 		// TODO Auto-generated method stub
+		User user = new User();
+		user.setUsername("huangtq");
+		user.setUsersex(1);
+		user.setUserage(23);
+		this.userDao.insert(user);
 		return 1;
 	}
 

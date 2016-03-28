@@ -3,8 +3,12 @@ package com.cn.safety.pojo;
 public class User {
     private Integer id;
 
-    private String userName;
-
+    private String username;
+    
+    private Integer usersex;
+    
+    private Integer userage;
+    
     private String password;
 
     private Integer age;
@@ -16,16 +20,32 @@ public class User {
     public void setId(Integer id) {
         this.id = id;
     }
+    
+    public String getUsername() {
+		return username;
+	}
 
-    public String getUserName() {
-        return userName;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
-    }
+	public Integer getUsersex() {
+		return usersex;
+	}
 
-    public String getPassword() {
+	public void setUsersex(Integer usersex) {
+		this.usersex = usersex;
+	}
+
+	public Integer getUserage() {
+		return userage;
+	}
+
+	public void setUserage(Integer userage) {
+		this.userage = userage;
+	}
+
+	public String getPassword() {
         return password;
     }
 

@@ -21,10 +21,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.cn.safety.pojo.User" >
-    insert into user_t (id, user_name, password, 
-      age)
-    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{age,jdbcType=INTEGER})
+    insert into t_safety_user (username, usersex, userage)
+    values (#{username,jdbcType=VARCHAR}, #{usersex,jdbcType=INTEGER}, 
+      #{userage,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.cn.safety.pojo.User" >
     insert into user_t
