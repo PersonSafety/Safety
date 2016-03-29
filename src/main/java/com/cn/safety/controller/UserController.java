@@ -20,7 +20,6 @@ import com.cn.safety.model.ResultData;
 import com.cn.safety.model.UserRequest;
 import com.cn.safety.pojo.User;
 import com.cn.safety.service.IUserService;
-import com.cn.safety.service.impl.UserServiceImpl;
 
 @Controller
 @RequestMapping("/user")

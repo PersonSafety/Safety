@@ -11,12 +11,18 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
+/**
+ * 法制网
+ * @author tech
+ *
+ */
 @Service("legaldailyProcessor")
 public class LegaldailyProcessor implements PageProcessor {
 
 	@Autowired
 	private CrawlNewsPipeline crawlNewsPipeline;
-	public static final String URL_LIST = "http://www.legaldaily.com.cn\\/legal_case(.*)";
+	public static final String URL_Seed = "http://www.legaldaily.com.cn/legal_case/node_33834.htm";//种子url
+	public static final String URL_LIST = "http://www.legaldaily.com.cn\\/legal_case(.*)";//包括分页的新闻列表url
 	//内容详情页，注意正则表达式要用（）括起来。
 	public static final String URL_Content = "(http://www.legaldaily.com.cn/legal_case/content(.*))";
     private Site site = Site.me().setRetryTimes(3).setSleepTime(100);
@@ -49,9 +55,12 @@ public class LegaldailyProcessor implements PageProcessor {
         return site;
     }
 
+    /*
+     * 抓取的入口方法
+     */
     public void crawl(){
     	 Spider.create(new LegaldailyProcessor())
-     	.addUrl("http://www.legaldaily.com.cn/legal_case/node_33834.htm")
+     	.addUrl(URL_Seed)
      	.addPipeline(crawlNewsPipeline)
      	.thread(5)
      	.run();
