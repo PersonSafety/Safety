@@ -168,11 +168,13 @@ public class HttpClientUtils {
 	
 	public static void main(String[] args) {
 		String url = "http://yuntuapi.amap.com/datamanage/table/create";
+		/*---------json格式----------*/
 		JSONObject json = new JSONObject();
 		json.put("key", "0db297d5e879bef48ae0f58f9297d22c");
 		json.put("name", "黄de云图");
-		/*---------------------------------*/
+		/*---------String格式----------*/
 		String str = "key=0db297d5e879bef48ae0f58f9297d22c&name=测试的云图";
+
 		JSONObject res = httpPost(url,str);
 		System.out.println(res);
 	}
