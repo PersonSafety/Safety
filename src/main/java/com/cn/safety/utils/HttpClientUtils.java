@@ -28,32 +28,17 @@ public class HttpClientUtils {
 	private static Logger logger = LoggerFactory
 			.getLogger(HttpClientUtils.class); // 日志记录
 
+	
 	/**
-	 * httpPost
+	 * post请求传输json参数
 	 * 
 	 * @param url
-	 *            路径
-	 * @param jsonParam
+	 *            url地址
+	 * @param json
 	 *            参数
 	 * @return
 	 */
 	public static JSONObject httpPost(String url, JSONObject jsonParam) {
-		return httpPost(url, jsonParam, false);
-	}
-
-	/**
-	 * post请求
-	 * 
-	 * @param url
-	 *            url地址
-	 * @param jsonParam
-	 *            参数
-	 * @param noNeedResponse
-	 *            不需要返回结果
-	 * @return
-	 */
-	public static JSONObject httpPost(String url, JSONObject jsonParam,
-			boolean noNeedResponse) {
 		// post请求返回结果
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		JSONObject jsonResult = null;
@@ -72,16 +57,64 @@ public class HttpClientUtils {
 				httpPost.setEntity(entity);
 			}
 			CloseableHttpResponse result = httpClient.execute(httpPost);
-			/** 请求发送成功，并得到响应 **/
+			//请求发送成功，并得到响应
 			if (result.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				String str = "";
 				try {
-					/** 读取服务器返回过来的json字符串数据 **/
+					//读取服务器返回过来的json字符串数据 
 					str = EntityUtils.toString(result.getEntity(), "utf-8");
-					if (noNeedResponse) {
-						return null;
-					}
-					/** 把json字符串转换成json对象 **/
+					//把json字符串转换成json对象 
+					jsonResult = JSONObject.parseObject(str);
+				} catch (Exception e) {
+					logger.error("post请求提交失败:" + url, e);
+				}
+			}
+		} catch (IOException e) {
+			logger.error("post请求提交失败:" + url, e);
+		} finally {
+			httpPost.releaseConnection();
+		}
+		return jsonResult;
+	}
+	
+	
+	/**
+	 * post请求传输String参数
+	 * 例如：name=Jack&sex=1&type=2
+	 * Content-type:application/x-www-form-urlencoded
+	 * @param url
+	 *            url地址
+	 * @param strParam
+	 *            参数
+	 * @param noNeedResponse
+	 *            不需要返回结果
+	 * @return
+	 */
+	public static JSONObject httpPost(String url, String strParam) {
+		// post请求返回结果
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		JSONObject jsonResult = null;
+		HttpPost httpPost = new HttpPost(url);
+		// 设置请求和传输超时时间
+		RequestConfig requestConfig = RequestConfig.custom()
+				.setSocketTimeout(2000).setConnectTimeout(2000).build();
+		httpPost.setConfig(requestConfig);
+		try {
+			if (null != strParam) {
+				// 解决中文乱码问题
+				StringEntity entity = new StringEntity(strParam,"utf-8");
+				entity.setContentEncoding("UTF-8");
+				entity.setContentType("application/x-www-form-urlencoded");
+				httpPost.setEntity(entity);
+			}
+			CloseableHttpResponse result = httpClient.execute(httpPost);
+			//请求发送成功，并得到响应
+			if (result.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				String str = "";
+				try {
+					//读取服务器返回过来的json字符串数据
+					str = EntityUtils.toString(result.getEntity(), "utf-8");
+					//把json字符串转换成json对象
 					jsonResult = JSONObject.parseObject(str);
 				} catch (Exception e) {
 					logger.error("post请求提交失败:" + url, e);
@@ -115,12 +148,12 @@ public class HttpClientUtils {
 		try {
 			CloseableHttpResponse response = client.execute(request);
 
-			/** 请求发送成功，并得到响应 **/
+			//请求发送成功，并得到响应
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				/** 读取服务器返回过来的json字符串数据 **/
+				//读取服务器返回过来的json字符串数据
 				HttpEntity entity = response.getEntity();
 				String strResult = EntityUtils.toString(entity, "utf-8");
-				/** 把json字符串转换成json对象 **/
+				//把json字符串转换成json对象
 				jsonResult = JSONObject.parseObject(strResult);
 			} else {
 				logger.error("get请求提交失败:" + url);
@@ -132,4 +165,20 @@ public class HttpClientUtils {
 		}
 		return jsonResult;
 	}
+	
+	public static void main(String[] args) {
+		String url = "http://yuntuapi.amap.com/datamanage/table/create";
+		JSONObject json = new JSONObject();
+		json.put("key", "0db297d5e879bef48ae0f58f9297d22c");
+		json.put("name", "黄de云图");
+		/*---------------------------------*/
+		String str = "key=0db297d5e879bef48ae0f58f9297d22c&name=测试的云图";
+		JSONObject res = httpPost(url,str);
+		System.out.println(res);
+	}
 }
+
+
+
+
+
