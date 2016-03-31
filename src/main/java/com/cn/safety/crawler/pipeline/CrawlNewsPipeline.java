@@ -15,7 +15,7 @@ import us.codecraft.webmagic.pipeline.Pipeline;
  * @author tech
  *
  */
-@Component("CrawlNewsPipeline")
+@Component("crawlNewsPipeline")
 public class CrawlNewsPipeline implements Pipeline {
 
 	@Resource
