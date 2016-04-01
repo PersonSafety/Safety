@@ -1,5 +1,7 @@
 package com.cn.safety.crawler;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.BeanFactory;
@@ -13,6 +15,7 @@ import us.codecraft.webmagic.Spider;
 import com.cn.safety.crawler.pipeline.CrawlNewsPipeline;
 import com.cn.safety.crawler.processor.LegaldailyProcessor;
 import com.cn.safety.crawler.processor.XinhuanetProcessor;
+import com.cn.safety.dao.ICrawlNewsDao;
 import com.cn.safety.service.IUserService;
 import com.cn.safety.service.impl.UserServiceImpl;
 
@@ -22,21 +25,27 @@ public class NewsCrawler {
 	@Resource
 	private CrawlNewsPipeline crawlNewsPipeline;
 
+	@Resource
+	private ICrawlNewsDao crawlNewsDao;
 	/*
 	 * 抓取的入口方法
 	 */
-	@Scheduled(cron = "0 39 * * * ?")
-	public void crawl(String URL_Seed) {
-		// TODO 取出所有url的list，for循环Spider.create
+	//@Scheduled(cron = "0 51 13 * * ?")
+	public void crawl() {
+		System.out.println("开始抓取。。。");
 		// 一定要new一个processor，因为spring注入是单例
-		Spider.create(new LegaldailyProcessor())
-				.addUrl(URL_Seed)
-				.addPipeline(crawlNewsPipeline)
-				.thread(5)
-				.run();
+		List<String> list = crawlNewsDao.selectSeedUrls();
+		for(String url : list){
+			Spider.create(new LegaldailyProcessor())
+			.addUrl(url)
+			.addPipeline(crawlNewsPipeline)
+			.thread(5)
+			.run();
+		}
 	}
 
 	public static void main(String[] args) {
+		/*
 		@SuppressWarnings("resource")
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
 				"classpath:spring-mvc.xml");
@@ -44,5 +53,8 @@ public class NewsCrawler {
 		final XinhuanetProcessor myCrawler = (XinhuanetProcessor) factory
 				.getBean("xinhuanetProcessor");
 		myCrawler.crawl();
+		*/
+		NewsCrawler c = new NewsCrawler();
+		c.crawl();
 	}
 }

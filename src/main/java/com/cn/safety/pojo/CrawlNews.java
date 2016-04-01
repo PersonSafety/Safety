@@ -6,6 +6,7 @@ public class CrawlNews {
 	private String title;
 	private String content;
 	private String region;
+	private String regionLevel;
 	private String publishTime;
 	private String avatar;
 	public String getUrl() {
@@ -31,6 +32,12 @@ public class CrawlNews {
 	}
 	public void setRegion(String region) {
 		this.region = region;
+	}
+	public String getRegionLevel() {
+		return regionLevel;
+	}
+	public void setRegionLevel(String regionLevel) {
+		this.regionLevel = regionLevel;
 	}
 	public String getPublishTime() {
 		return publishTime;

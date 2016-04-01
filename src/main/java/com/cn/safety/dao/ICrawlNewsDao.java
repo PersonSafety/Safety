@@ -1,5 +1,7 @@
 package com.cn.safety.dao;
 
+import java.util.List;
+
 import com.cn.safety.pojo.CrawlNews;
 
 /**
@@ -10,4 +12,5 @@ import com.cn.safety.pojo.CrawlNews;
 public interface ICrawlNewsDao {
 
 	int insert(CrawlNews record);
+	List<String> selectSeedUrls();
 }

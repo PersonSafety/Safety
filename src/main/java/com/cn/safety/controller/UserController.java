@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cn.safety.crawler.NewsCrawler;
 import com.cn.safety.model.ResultData;
 import com.cn.safety.model.UserRequest;
 import com.cn.safety.pojo.User;
@@ -26,6 +27,8 @@ import com.cn.safety.service.IUserService;
 public class UserController {
 	@Resource
 	private IUserService userService;
+	@Resource
+	private NewsCrawler newsCrawler;
 	
 	@RequestMapping("/showUser")
 	public String toIndex(HttpServletRequest request,Model model){
@@ -39,7 +42,7 @@ public class UserController {
 	@ResponseBody
 	public Map<String,Object> getDate(HttpServletResponse response)throws IOException {
 		SimpleDateFormat tempDate = new SimpleDateFormat("yyyy-MM-dd");
-
+		newsCrawler.crawl();
 		String datetime = tempDate.format(new java.util.Date());
 
 		Map<String, Object> map = new HashMap<String, Object>();

@@ -19,7 +19,7 @@ public class TaskJob {
 	@Resource
 	private ICrawlNewsService crawlNewsService;
 	//cron表达式：秒，分，时，日，月，星期，年
-	@Scheduled(cron = "0 39 * * * ?")  
+	//@Scheduled(cron = "0 39 * * * ?")  
 	public void job() {
 		System.out.println("任务执行中。。。");
 		CrawlNews news = new CrawlNews();

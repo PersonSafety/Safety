@@ -1,11 +1,20 @@
 package com.cn.safety.crawler.processor;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.http.client.utils.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.cn.safety.crawler.pipeline.CrawlNewsPipeline;
 import com.cn.safety.pojo.CrawlNews;
+import com.cn.safety.utils.Constant;
+import com.cn.safety.utils.DateTimeUtils;
+import com.cn.safety.utils.HttpClientUtils;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -16,15 +25,11 @@ import us.codecraft.webmagic.processor.PageProcessor;
  * @author tech
  *
  */
-@Service("legaldailyProcessor")
 public class LegaldailyProcessor implements PageProcessor {
 
-	@Autowired
-	private CrawlNewsPipeline crawlNewsPipeline;
-	public static String URL_Seed = "http://www.legaldaily.com.cn/legal_case/node_33834.htm";//种子url
-	public static final String URL_LIST = "http://www.legaldaily.com.cn\\/legal_case(.*)";//包括分页的新闻列表url
-	//内容详情页，注意正则表达式要用（）括起来。
-	public static final String URL_Content = "(http://www.legaldaily.com.cn/legal_case/content(.*))";
+	private static Logger logger = LoggerFactory
+			.getLogger(LegaldailyProcessor.class); // 日志记录
+	private String URL_Seed = "";//种子url
 	private int start = 1;//第一次进入process方法，即种子url
     private Site site = Site.me().setRetryTimes(3).setSleepTime(100);
 
@@ -35,29 +40,13 @@ public class LegaldailyProcessor implements PageProcessor {
     		start = 0;
     	}
     	switch (URL_Seed){
-    	case "http://www.legaldaily.com.cn/legal_case/node_33834.htm":
-    		if(page.getUrl().regex(URL_Content).match()){
-    			// TODO 找出时间和图片，只抓取当天和昨天发布的新闻
-        		String title = page.getHtml().xpath("//td[@class='f22 b black']/text()").toString();
-        		String content = page.getHtml().xpath("//div[@id='ShowContent']/html()").toString();
-        		CrawlNews news = new CrawlNews();
-        		news.setUrl(page.getUrl().toString());
-        		news.setTitle(title);
-        		news.setContent(content);
-        		news.setRegion("中国");
-                page.putField("news", news);
-                System.out.println("------"+title+"-------");
-                System.out.println("------"+content+"-------");
-        	}else if(page.getUrl().regex(URL_LIST).match()){
-        		page.addTargetRequests(page.getHtml().xpath("//div[@id=\"displaypagenum\"]").links().all());
-                page.addTargetRequests(page.getHtml().links().regex(URL_Content).all());
-        	}
+    	case Constant.URL_legaldaily_seed:
+    		legaldaily(page);
     		break;
-    	case "":
-    		System.out.println();
+    	case Constant.URL_xinhuanet_seed:
+    		xinhuaNet(page);
     		break;
     	}
-    	
         if(page.getResultItems().get("news") == null){
         	 //设置skip之后，这个页面的结果不会被Pipeline处理
              page.setSkip(true);
@@ -68,7 +57,80 @@ public class LegaldailyProcessor implements PageProcessor {
     public Site getSite() {
         return site;
     }
-
+    /*
+     * 法制网legaldaily.com
+     */
+    private static void legaldaily(Page page){
+    	try{
+    		if(page.getUrl().regex(Constant.URL_legaldaily_content).match()){
+    			// 只抓取当天和昨天发布的新闻
+        		String title = page.getHtml().xpath("//td[@class='f22 b black']/text()").toString();
+        		String content = page.getHtml().xpath("//div[@id='ShowContent']/html()").toString();
+        		String time = page.getHtml().regex("(\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2})").all().get(0);
+        		String[] format={"yyyy-MM-dd HH:mm:ss"};
+        		Date date = DateUtils.parseDate(time,format);
+        		int d = DateTimeUtils.daysOfTwo(date,new Date());
+        		if(d<=1){
+        			CrawlNews news = new CrawlNews();
+            		news.setUrl(page.getUrl().toString());
+            		news.setTitle(title);
+            		news.setContent(content);
+            		news.setPublishTime(time);
+            		news.setRegion("中国");
+                    page.putField("news", news);
+                    System.out.println("------"+title+"-------");
+                    System.out.println("------"+content+"-------");
+        		}
+        	}else if(page.getUrl().regex(Constant.URL_legaldaily_list).match()){
+        		page.addTargetRequests(page.getHtml().xpath("//div[@id=\"displaypagenum\"]").links().all());
+                page.addTargetRequests(page.getHtml().links().regex(Constant.URL_legaldaily_content).all());
+        	}
+    	}catch (Exception e){
+    		logger.info("抓取出错----------"+page.getUrl().toString());
+    	}
+    	
+    }
+    /*
+     * 新华网xinhuaNet
+     */
+    private static void xinhuaNet(Page page){
+    	try{
+    		if(page.getUrl().regex(Constant.URL_xinhuanet_content).match()){
+        		String pre = page.getUrl().toString().substring(0, 43);
+        		String title = page.getHtml().xpath("//h1[@id='title']/text()").toString();
+        		String content = page.getHtml().xpath("//div[@class='article']/html()").toString();
+        		List<String> imgs = page.getHtml().xpath("//div[@class='article']//img/@src").all();
+        		String img = null;
+        		if(!CollectionUtils.isEmpty(imgs)){
+        			img = imgs.get(0);
+        			img = pre + img;
+        		}
+        		//String img2 = page.getHtml().$("div.article img","src").all().get(0);
+        		String time = page.getHtml().regex("(\\d{4}年\\d{2}月\\d{2}日\\s\\d{2}:\\d{2}:\\d{2})").all().get(0);
+        		String[] format={"yyyy年MM月dd日 HH:mm:ss"};
+        		Date date = DateUtils.parseDate(time,format);
+        		int d = DateTimeUtils.daysOfTwo(date,new Date());
+        		if(d<=1 && title != null){
+        			CrawlNews news = new CrawlNews();
+            		news.setUrl(page.getUrl().toString());
+            		news.setTitle(title);
+            		news.setContent(content);
+            		news.setPublishTime(time);
+            		news.setAvatar(img);
+            		news.setRegion("中国");
+                    page.putField("news", news);
+//                    System.out.println("------"+title+"-------");
+//                    System.out.println("------"+content+"-------");
+        		}
+        	}else if(page.getUrl().regex(Constant.URL_xinhuanet_list).match()){
+                page.addTargetRequests(page.getHtml().links().regex(Constant.URL_xinhuanet_content).all());
+                page.addTargetRequests(page.getHtml().links().regex(Constant.URL_xinhuanet_list).all());
+        	}
+    	}catch (Exception e){
+    		logger.info("抓取出错----------"+page.getUrl().toString());
+    	}
+    	
+    }
 }
 
 
