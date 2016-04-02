@@ -14,4 +14,8 @@ public class Constant {
 	public static final String URL_xinhuanet_seed = "http://www.xinhuanet.com/legal/index.htm";
 	public static final String URL_xinhuanet_list = "(http://www.xinhuanet.com/legal/\\w+.htm)";
 	public static final String URL_xinhuanet_content = "(http://news.xinhuanet.com/legal/\\d+-\\d+/(.*))";
+	
+	public static final String URL_people_seed = "http://legal.people.com.cn/";
+	public static final String URL_people_list = "(http://legal.people.com.cn/(.*))";
+	public static final String URL_people_content = "(http://legal.people.com.cn/n1/\\d+/\\d+/(.*))";
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.cn.safety.crawler.pipeline.CrawlNewsPipeline;
 import com.cn.safety.pojo.CrawlNews;
 import com.cn.safety.utils.Constant;
+import com.cn.safety.utils.CrawlUtils;
 import com.cn.safety.utils.DateTimeUtils;
 import com.cn.safety.utils.HttpClientUtils;
 
@@ -31,6 +32,7 @@ public class LegaldailyProcessor implements PageProcessor {
 			.getLogger(LegaldailyProcessor.class); // 日志记录
 	private String URL_Seed = "";//种子url
 	private int start = 1;//第一次进入process方法，即种子url
+	private static int shouye = 1;//保证只抓取首页的内容
     private Site site = Site.me().setRetryTimes(3).setSleepTime(100);
 
     @Override
@@ -45,6 +47,9 @@ public class LegaldailyProcessor implements PageProcessor {
     		break;
     	case Constant.URL_xinhuanet_seed:
     		xinhuaNet(page);
+    		break;
+    	case Constant.URL_people_seed:
+    		people(page);
     		break;
     	}
         if(page.getResultItems().get("news") == null){
@@ -78,12 +83,12 @@ public class LegaldailyProcessor implements PageProcessor {
             		news.setPublishTime(time);
             		news.setRegion("中国");
                     page.putField("news", news);
-                    System.out.println("------"+title+"-------");
-                    System.out.println("------"+content+"-------");
         		}
         	}else if(page.getUrl().regex(Constant.URL_legaldaily_list).match()){
-        		page.addTargetRequests(page.getHtml().xpath("//div[@id=\"displaypagenum\"]").links().all());
-                page.addTargetRequests(page.getHtml().links().regex(Constant.URL_legaldaily_content).all());
+        		if(shouye==1){
+        			page.addTargetRequests(page.getHtml().links().regex(Constant.URL_legaldaily_content).all());        			
+        			shouye = 0;
+        		}
         	}
     	}catch (Exception e){
     		logger.info("抓取出错----------"+page.getUrl().toString());
@@ -119,18 +124,61 @@ public class LegaldailyProcessor implements PageProcessor {
             		news.setAvatar(img);
             		news.setRegion("中国");
                     page.putField("news", news);
-//                    System.out.println("------"+title+"-------");
-//                    System.out.println("------"+content+"-------");
         		}
         	}else if(page.getUrl().regex(Constant.URL_xinhuanet_list).match()){
-                page.addTargetRequests(page.getHtml().links().regex(Constant.URL_xinhuanet_content).all());
-                page.addTargetRequests(page.getHtml().links().regex(Constant.URL_xinhuanet_list).all());
+        		if(shouye==1){
+        			page.addTargetRequests(page.getHtml().links().regex(Constant.URL_xinhuanet_content).all());        			
+        			shouye = 0;
+        		}
         	}
     	}catch (Exception e){
     		logger.info("抓取出错----------"+page.getUrl().toString());
     	}
-    	
     }
+    /*
+     * http://legal.people.com.cn/
+     */
+    private static void people(Page page){
+    	try{
+    		if(page.getUrl().regex(Constant.URL_people_content).match()){
+        		String pre = page.getUrl().toString().substring(0, 43);
+        		String title = page.getHtml().xpath("//h1[@id='p_title']/text()").toString();
+        		String content = page.getHtml().xpath("//div[@id='p_content']/html()").toString();
+        		List<String> imgs = page.getHtml().xpath("//div[@id='p_content']//img/@src").all();
+        		String img = null;
+        		if(!CollectionUtils.isEmpty(imgs)){
+        			img = imgs.get(0);
+        			img = pre + img;
+        		}
+        		//String img2 = page.getHtml().$("div.article img","src").all().get(0);
+        		String time = page.getHtml().regex("(\\d{4}年\\d{2}月\\d{2}日\\d{2}:\\d{2})").all().get(0);
+        		String[] format={"yyyy年MM月dd日HH:mm"};
+        		Date date = DateUtils.parseDate(time,format);
+        		int d = DateTimeUtils.daysOfTwo(date,new Date());
+        		if(d<=1 && title != null && CrawlUtils.checkKeywords(title)){
+        			CrawlNews news = new CrawlNews();
+            		news.setUrl(page.getUrl().toString());
+            		news.setTitle(title);
+            		news.setContent(content);
+            		news.setPublishTime(time);
+            		news.setAvatar(img);
+            		news.setRegion("中国");
+                    page.putField("news", news);
+        		}
+        	}else if(page.getUrl().regex(Constant.URL_people_list).match()){
+        		// 为保证新闻的时效性，其实只抓取首页的新闻就行了，即最新的新闻
+        		if(shouye==1){
+        			page.addTargetRequests(page.getHtml().links().regex(Constant.URL_people_content).all());        			
+        			shouye = 0;
+        		}
+        	}
+    	}catch (Exception e){
+    		logger.info("抓取出错----------"+page.getUrl().toString());
+    		e.printStackTrace();
+    	}
+    }
+    
+    
 }
 
 
