@@ -82,6 +82,37 @@ public class UserController {
             }             
         }  
         return resultData;  
+    }
+    
+    /**
+     * 校验home坐标
+     * @param requestData
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/homeAddress", method = RequestMethod.POST,consumes = "application/json")  
+    @ResponseBody  
+    public ResultData<User> homeAddress(@RequestBody UserRequest requestData) throws IOException {        
+        ResultData<User> resultData =new ResultData<User>();
+        resultData.setStatus(0);  
+        resultData.setData(null);  
+        if (requestData==null) {              
+            resultData.setMessage("参数错误：没有传入参数");  
+        } else {              
+            //身份验证处理  
+            try {  
+                int i=userService.homeAddress(requestData.getUserId(),requestData.getHomecoordinate());  
+                if (i==1){  
+                    resultData.setStatus(1);  
+                    resultData.setMessage("添加成功");  
+                } else {  
+                    resultData.setMessage("添加失败");  
+                }  
+            } catch (Exception e) {  
+                resultData.setMessage("添加失败:"+e.getMessage());  
+            }             
+        }  
+        return resultData;  
     }  
 }
 

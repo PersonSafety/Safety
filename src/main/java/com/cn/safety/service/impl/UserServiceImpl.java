@@ -27,5 +27,13 @@ public class UserServiceImpl implements IUserService {
 		this.userDao.insert(user);
 		return 1;
 	}
+	/**
+	 * 校验home坐标
+	 */
+	@Override
+	public int homeAddress(String userId, String homecoordinate) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

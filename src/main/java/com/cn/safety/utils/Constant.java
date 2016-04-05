@@ -18,4 +18,7 @@ public class Constant {
 	public static final String URL_people_seed = "http://legal.people.com.cn/";
 	public static final String URL_people_list = "(http://legal.people.com.cn/(.*))";
 	public static final String URL_people_content = "(http://legal.people.com.cn/n1/\\d+/\\d+/(.*))";
+	
+	public static final String URL_gmw_seed = "http://legal.gmw.cn/";
+	public static final String URL_gmw_content = "(http://legal.gmw.cn/\\d{4}-\\d{2}/\\d{2}/(.*))";
 }

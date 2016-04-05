@@ -3,7 +3,7 @@ package com.cn.safety.utils;
 public class CrawlUtils {
 
 	//要匹配的关键词
-	private static final String[] keys = {"抢劫","袭击","枪","杀","偷"};
+	private static final String[] keys = {"抢劫","袭击","枪","杀","偷","死","吸毒","爆炸"};
 	/**
 	 * 检测是否包含关键字
 	 * 例如抢劫，袭击，枪，杀

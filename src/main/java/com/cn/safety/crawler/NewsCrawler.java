@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Spider;
 
 import com.cn.safety.crawler.pipeline.CrawlNewsPipeline;
-import com.cn.safety.crawler.processor.LegaldailyProcessor;
+import com.cn.safety.crawler.processor.NewsProcessor;
 import com.cn.safety.crawler.processor.XinhuanetProcessor;
 import com.cn.safety.dao.ICrawlNewsDao;
 import com.cn.safety.service.IUserService;
@@ -36,7 +36,7 @@ public class NewsCrawler {
 		// 一定要new一个processor，因为spring注入是单例
 		List<String> list = crawlNewsDao.selectSeedUrls();
 		for(String url : list){
-			Spider.create(new LegaldailyProcessor())
+			Spider.create(new NewsProcessor())
 			.addUrl(url)
 			.addPipeline(crawlNewsPipeline)
 			.thread(5)
