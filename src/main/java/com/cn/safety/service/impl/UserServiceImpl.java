@@ -1,5 +1,7 @@
 package com.cn.safety.service.impl;
 
+import java.util.HashMap;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -34,6 +36,11 @@ public class UserServiceImpl implements IUserService {
 	public int homeAddress(String userId, String homecoordinate) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public HashMap<String, Object> getUserHome(String userId) {
+		HashMap<String,Object> user = this.userDao.selectUserHome(userId);
+		return user;
 	}
 
 }

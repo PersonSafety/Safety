@@ -16,6 +16,9 @@
     from user_t
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectUserHome" resultType="hashmap" parameterType="String" >
+    select * from t_safety_user_location where userid = #{userid}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user_t
     where id = #{id,jdbcType=INTEGER}

@@ -1,5 +1,7 @@
 package com.cn.safety.dao;
 
+import java.util.HashMap;
+
 import com.cn.safety.pojo.User;
 
 public interface IUserDao {
@@ -11,6 +13,8 @@ public interface IUserDao {
 
     User selectByPrimaryKey(Integer id);
 
+    HashMap<String,Object> selectUserHome(String userid);
+    
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);

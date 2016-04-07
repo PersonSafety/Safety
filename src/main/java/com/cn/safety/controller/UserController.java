@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cn.safety.crawler.NewsCrawler;
@@ -85,35 +86,64 @@ public class UserController {
     }
     
     /**
+     * 算法思路：
+     * 1.先从服务器取家的坐标
+     * 2.如果没有，则上传坐标；如果有，则计算该坐标和现在坐标的距离。
+     * 3.如果距离很小，则本次校验通过。如果距离很大，上传新的坐标
      * 校验home坐标
      * @param requestData
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/homeAddress", method = RequestMethod.POST,consumes = "application/json")  
-    @ResponseBody  
-    public ResultData<User> homeAddress(@RequestBody UserRequest requestData) throws IOException {        
+    @RequestMapping(value = "/homeAddress", method = RequestMethod.GET)  
+    @ResponseBody
+    public ResultData<User> homeAddress(@RequestParam("userid") String userid,@RequestParam("lat") String lat,
+    		@RequestParam("lng") String lng) throws IOException {        
         ResultData<User> resultData =new ResultData<User>();
         resultData.setStatus(0);  
         resultData.setData(null);  
-        if (requestData==null) {              
+        if (userid == null || lat == null || lng == null) {              
             resultData.setMessage("参数错误：没有传入参数");  
-        } else {              
-            //身份验证处理  
+        } else {             
             try {  
-                int i=userService.homeAddress(requestData.getUserId(),requestData.getHomecoordinate());  
-                if (i==1){  
-                    resultData.setStatus(1);  
-                    resultData.setMessage("添加成功");  
-                } else {  
-                    resultData.setMessage("添加失败");  
-                }  
+                HashMap<String, Object> user=userService.getUserHome(userid);
+                if(user == null){
+                	//第一天，插入该条数据
+                	System.out.println("-------------不存在哦--------------");
+                	resultData.setMessage("无记录");  
+                }else{
+                	//计算两次距离
+                }
             } catch (Exception e) {  
                 resultData.setMessage("添加失败:"+e.getMessage());  
             }             
-        }  
-        return resultData;  
-    }  
+        }
+        return resultData;
+    }
+    
+    @RequestMapping(value = "/getUserHome", method = RequestMethod.GET)
+    @ResponseBody
+	public ResultData<HashMap<String,Object>> getUserHome(@RequestParam("userid") String userid){
+    	ResultData<HashMap<String,Object>> resultData =new ResultData<HashMap<String,Object>>();
+        resultData.setStatus(0);  
+        resultData.setData(null);  
+        if (userid == null) {              
+            resultData.setMessage("参数错误：没有传入参数");  
+        } else {             
+            try {  
+                HashMap<String, Object> user=userService.getUserHome(userid);
+                if(user == null){
+                	System.out.println("-------------不存在哦--------------");
+                	resultData.setMessage("无记录");  
+                }else{
+                	resultData.setData(user);
+                }
+            } catch (Exception e) {  
+                resultData.setMessage("getUserHome失败:"+e.getMessage());  
+            }             
+        }
+        return resultData;
+	}
 }
 
 
