@@ -8,6 +8,12 @@ public interface IUserDao {
     int deleteByPrimaryKey(Integer id);
 
     int insert(User record);
+    
+    int addHomeAddress(String userid,String lat,String lng);
+    
+    int updateHomeAddress(String userid,String lat,String lng);
+    
+    int strongHomeAddress(String userid);
 
     int insertSelective(User record);
 

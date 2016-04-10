@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cn.safety.crawler.NewsCrawler;
 import com.cn.safety.model.ResultData;
 import com.cn.safety.model.UserRequest;
@@ -95,27 +96,38 @@ public class UserController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/homeAddress", method = RequestMethod.GET)  
+    @RequestMapping(value = "/homeAddress", method = RequestMethod.POST,consumes = "application/json")  
     @ResponseBody
-    public ResultData<User> homeAddress(@RequestParam("userid") String userid,@RequestParam("lat") String lat,
-    		@RequestParam("lng") String lng) throws IOException {        
+    public ResultData<User> homeAddress(@RequestBody JSONObject json) throws IOException { 
+    	String userid = json.getString("userid");
+    	String isNew = json.getString("isNew");//第一次上传坐标
+    	String isHome = json.getString("isHome");//是否和上次坐标一样
+    	String lat = json.getString("lat");
+    	String lng = json.getString("lng");
         ResultData<User> resultData =new ResultData<User>();
         resultData.setStatus(0);  
         resultData.setData(null);  
         if (userid == null || lat == null || lng == null) {              
             resultData.setMessage("参数错误：没有传入参数");  
-        } else {             
-            try {  
-                HashMap<String, Object> user=userService.getUserHome(userid);
-                if(user == null){
-                	//第一天，插入该条数据
-                	System.out.println("-------------不存在哦--------------");
-                	resultData.setMessage("无记录");  
+        } else {        
+            try {
+            	int i = 0;
+            	if(isNew.equals("1")){
+            		i=userService.addHomeAddress(userid, lat, lng); 
+            	}else if(isHome.equals("0")){
+            		//重新上传坐标
+            		i = userService.updateHomeAddress(userid, lat, lng);
+            	}else{
+            		//验证天数+1
+            		i = userService.strongHomeAddress(userid);
+            	}
+                if(i == 1){
+                	resultData.setMessage("更新成功");  
                 }else{
-                	//计算两次距离
+                	resultData.setMessage("更新失败");  
                 }
             } catch (Exception e) {  
-                resultData.setMessage("添加失败:"+e.getMessage());  
+                resultData.setMessage("更新失败:"+e.getMessage());  
             }             
         }
         return resultData;

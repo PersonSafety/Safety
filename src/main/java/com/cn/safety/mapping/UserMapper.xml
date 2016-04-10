@@ -23,11 +23,34 @@
     delete from user_t
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <!-- safety sql-->
   <insert id="insert" parameterType="com.cn.safety.pojo.User" >
     insert into t_safety_user (username, usersex, userage)
     values (#{username,jdbcType=VARCHAR}, #{usersex,jdbcType=INTEGER}, 
       #{userage,jdbcType=INTEGER})
   </insert>
+  
+  <insert id="addHomeAddress" parameterType="String" >
+    insert into t_safety_user_location(userid, latitude, longitude,days,confirm)
+    values (#{userid,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, 
+      #{lng,jdbcType=VARCHAR}, 1,0)
+  </insert>
+  
+  <update id="updateHomeAddress" parameterType="String" >
+    update t_safety_user_location
+    set latitude = #{latitude,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      days = 1
+    where userid = #{userid,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateHomeAddress" parameterType="String" >
+    update t_safety_user_location
+    days = days+1
+    where userid = #{userid,jdbcType=VARCHAR}
+  </update>
+  
+  <!---->
   <insert id="insertSelective" parameterType="com.cn.safety.pojo.User" >
     insert into user_t
     <trim prefix="(" suffix=")" suffixOverrides="," >
