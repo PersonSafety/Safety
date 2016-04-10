@@ -44,9 +44,9 @@
     where userid = #{userid,jdbcType=VARCHAR}
   </update>
   
-  <update id="updateHomeAddress" parameterType="String" >
+  <update id="strongHomeAddress" parameterType="String" >
     update t_safety_user_location
-    days = days+1
+    set days = days+1
     where userid = #{userid,jdbcType=VARCHAR}
   </update>
   
