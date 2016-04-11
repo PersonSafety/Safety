@@ -21,4 +21,7 @@ public class Constant {
 	
 	public static final String URL_gmw_seed = "http://legal.gmw.cn/";
 	public static final String URL_gmw_content = "(http://legal.gmw.cn/\\d{4}-\\d{2}/\\d{2}/(.*))";
+	//千龙网
+	public static final String URL_qlw_seed = "http://www.qianlong.com/jrbj/1.shtml";
+	public static final String URL_qlw_content = "(http://beijing.qianlong.com/\\d{4}/\\d{4}/(.*))";
 }

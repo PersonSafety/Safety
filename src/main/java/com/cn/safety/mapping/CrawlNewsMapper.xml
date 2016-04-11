@@ -5,7 +5,7 @@
 <insert id="insert" parameterType="com.cn.safety.pojo.CrawlNews" >
     insert into t_safety_crawl_news (url, title, avatar, content,region,regionLevel,publishtime)
     values (#{url,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
-      #{content,jdbcType=VARCHAR},#{region,jdbcType=VARCHAR},"1",#{publishTime,jdbcType=VARCHAR})
+      #{content,jdbcType=VARCHAR},#{region,jdbcType=VARCHAR},#{regionLevel,jdbcType=VARCHAR},#{publishTime,jdbcType=VARCHAR})
 </insert>
 
   <select id="selectSeedUrls" resultType="String">

@@ -53,6 +53,9 @@ public class NewsProcessor implements PageProcessor {
     	case Constant.URL_gmw_seed:
     		gmw(page);
     		break;
+    	case Constant.URL_qlw_seed:
+    		qianlong(page);
+    		break;
     	}
         if(page.getResultItems().get("news") == null){
         	 //设置skip之后，这个页面的结果不会被Pipeline处理
@@ -88,6 +91,7 @@ public class NewsProcessor implements PageProcessor {
             		news.setContent(content);
             		news.setPublishTime(time);
             		news.setRegion("中国");
+            		news.setRegionLevel("1");
                     page.putField("news", news);
         		}
         	}
@@ -128,6 +132,7 @@ public class NewsProcessor implements PageProcessor {
             		news.setPublishTime(time);
             		news.setAvatar(img);
             		news.setRegion("中国");
+            		news.setRegionLevel("1");
                     page.putField("news", news);
         		}
         	}
@@ -164,6 +169,7 @@ public class NewsProcessor implements PageProcessor {
             		news.setContent(content);
             		news.setPublishTime(time);
             		news.setAvatar(img);
+            		news.setRegionLevel("1");
             		news.setRegion("中国");
                     page.putField("news", news);
         		}
@@ -204,6 +210,48 @@ public class NewsProcessor implements PageProcessor {
             		news.setPublishTime(time);
             		news.setAvatar(img);
             		news.setRegion("中国");
+            		news.setRegionLevel("1");
+                    page.putField("news", news);
+        		}
+        	}
+    	}catch (Exception e){
+    		logger.info("抓取出错----------"+page.getUrl().toString());
+    		e.printStackTrace();
+    	}
+    }
+    
+    /*
+     * 千龙网-今日北京模块
+     * http://www.qianlong.com/jrbj/1.shtml
+     */
+    private static void qianlong(Page page){
+    	try{
+    		// 为保证新闻的时效性，其实只抓取首页的新闻就行了，即最新的新闻
+    		if(page.getUrl().toString().equals(Constant.URL_qlw_seed)){
+    			page.addTargetRequests(page.getHtml().links().regex(Constant.URL_qlw_content).all());        			
+    		}
+    		if(page.getUrl().regex(Constant.URL_qlw_content).match()){
+        		String title = page.getHtml().xpath("//div[@class='row title']/text()").toString();
+        		String content = page.getHtml().xpath("//div[@id='content']/html()").toString();
+        		List<String> imgs = page.getHtml().xpath("//div[@id='content']//img/@src").all();
+        		String img = null;
+        		if(CollectionUtils.isNotEmpty(imgs)){
+        			img = imgs.get(0);
+        		}
+        		//String img2 = page.getHtml().$("div.article img","src").all().get(0);
+        		String time = page.getHtml().regex("(\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2})").all().get(0);
+        		String[] format={"yyyy-MM-dd HH:mm"};
+        		Date date = DateUtils.parseDate(time,format);
+        		int d = DateTimeUtils.daysOfTwo(date,new Date());
+        		if(d<=1 && title != null && CrawlUtils.checkKeywords(title)){
+        			CrawlNews news = new CrawlNews();
+            		news.setUrl(page.getUrl().toString());
+            		news.setTitle(title);
+            		news.setContent(content);
+            		news.setPublishTime(time);
+            		news.setAvatar(img);
+            		news.setRegion("北京");
+            		news.setRegionLevel("2");
                     page.putField("news", news);
         		}
         	}
