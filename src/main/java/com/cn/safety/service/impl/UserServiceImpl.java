@@ -29,40 +29,5 @@ public class UserServiceImpl implements IUserService {
 		int i = this.userDao.insert(user);
 		return i;
 	}
-	/**
-	 * 校验home坐标
-	 */
-	@Override
-	public int addHomeAddress(String userId, String lat, String lng) {
-		// TODO Auto-generated method stub
-		int i = this.userDao.addHomeAddress(userId,lat,lng);
-		return i;
-	}
-	
-	/**
-	 * 校验home坐标
-	 */
-	@Override
-	public int strongHomeAddress(String userId) {
-		// TODO Auto-generated method stub
-		int i = this.userDao.strongHomeAddress(userId);
-		return i;
-	}
-	
-	/**
-	 * 校验home坐标
-	 */
-	@Override
-	public int updateHomeAddress(String userId, String lat, String lng) {
-		// TODO Auto-generated method stub
-		int i = this.userDao.updateHomeAddress(userId,lat,lng);
-		return i;
-	}
-	
-	@Override
-	public HashMap<String, Object> getUserHome(String userId) {
-		HashMap<String,Object> user = this.userDao.selectUserHome(userId);
-		return user;
-	}
 
 }

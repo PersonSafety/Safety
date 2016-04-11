@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.safety.dao.ISafeDao" >
+
+  <select id="selectUserHome" resultType="hashmap" parameterType="String" >
+    select * from t_safety_user_location where userid = #{userid}
+  </select>
+  <!-- safety sql-->
+  <insert id="insert" parameterType="com.cn.safety.pojo.User" >
+    insert into t_safety_user (username, usersex, userage)
+    values (#{username,jdbcType=VARCHAR}, #{usersex,jdbcType=INTEGER}, 
+      #{userage,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="addHomeAddress" parameterType="String" >
+    insert into t_safety_user_location(userid, latitude, longitude,days,confirm)
+    values (#{userid,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, 
+      #{lng,jdbcType=VARCHAR}, 1,0)
+  </insert>
+  
+  <update id="updateHomeAddress" parameterType="String" >
+    update t_safety_user_location
+    set latitude = #{latitude,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      days = 1
+    where userid = #{userid,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="strongHomeAddress" parameterType="String" >
+    update t_safety_user_location
+    set days = days+1
+    where userid = #{userid,jdbcType=VARCHAR}
+  </update>
+  
+  <!---->
+</mapper>
