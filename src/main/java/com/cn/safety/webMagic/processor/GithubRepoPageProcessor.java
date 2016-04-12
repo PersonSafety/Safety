@@ -1,4 +1,4 @@
-package com.cn.safety.crawler.processor;
+package com.cn.safety.webMagic.processor;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;

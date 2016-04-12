@@ -1,23 +1,15 @@
-package com.cn.safety.crawler;
+package com.cn.safety.webMagic;
 
 import java.util.List;
 
 import javax.annotation.Resource;
-
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import us.codecraft.webmagic.Spider;
 
-import com.cn.safety.crawler.pipeline.CrawlNewsPipeline;
-import com.cn.safety.crawler.processor.NewsProcessor;
-import com.cn.safety.crawler.processor.XinhuanetProcessor;
 import com.cn.safety.dao.ICrawlNewsDao;
-import com.cn.safety.service.IUserService;
-import com.cn.safety.service.impl.UserServiceImpl;
+import com.cn.safety.webMagic.pipeline.CrawlNewsPipeline;
+import com.cn.safety.webMagic.processor.NewsProcessor;
 
 @Service
 public class NewsCrawler {

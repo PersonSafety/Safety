@@ -1,10 +1,10 @@
-package com.cn.safety.crawler.processor;
+package com.cn.safety.webMagic.processor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cn.safety.crawler.pipeline.CrawlNewsPipeline;
 import com.cn.safety.pojo.CrawlNews;
+import com.cn.safety.webMagic.pipeline.CrawlNewsPipeline;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;

@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cn.safety.crawler.NewsCrawler;
 import com.cn.safety.model.ResultData;
 import com.cn.safety.model.UserRequest;
 import com.cn.safety.pojo.User;
 import com.cn.safety.service.IUserService;
+import com.cn.safety.webMagic.NewsCrawler;
 
 @Controller
 @RequestMapping("/user")

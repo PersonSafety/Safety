@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cn.safety.crawler.NewsCrawler;
 import com.cn.safety.model.ResultData;
 import com.cn.safety.model.UserRequest;
 import com.cn.safety.pojo.User;
 import com.cn.safety.service.IUserService;
+import com.cn.safety.webMagic.NewsCrawler;
 /**
  * 新闻控制器
  * @author tech

@@ -1,4 +1,4 @@
-package com.cn.safety.crawler.pipeline;
+package com.cn.safety.webMagic.pipeline;
 
 import javax.annotation.Resource;
 

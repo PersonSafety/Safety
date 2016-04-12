@@ -1,4 +1,4 @@
-package com.cn.safety.crawler.processor;
+package com.cn.safety.webMagic.processor;
 
 import java.util.Date;
 import java.util.List;
@@ -7,19 +7,14 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import com.cn.safety.crawler.pipeline.CrawlNewsPipeline;
 import com.cn.safety.pojo.CrawlNews;
 import com.cn.safety.utils.Constant;
 import com.cn.safety.utils.CrawlUtils;
 import com.cn.safety.utils.DateTimeUtils;
-import com.cn.safety.utils.HttpClientUtils;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 /**
  * 新闻processor
