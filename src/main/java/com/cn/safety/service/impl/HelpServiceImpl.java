@@ -16,7 +16,7 @@ import com.cn.safety.service.IMyService;
 import com.cn.safety.service.ISafeService;
 import com.cn.safety.service.IUserService;
 
-@Service("myService")
+@Service("helpService")
 public class HelpServiceImpl implements IMyService {
 	@Resource
 	private IMyDao myDao;

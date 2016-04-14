@@ -84,19 +84,18 @@ public class FileOperateUtil {
      * @return 
      * @throws Exception 
      */  
-    public static List<Map<String, Object>> upload(HttpServletRequest request,  
-            String[] params, Map<String, Object[]> values) throws Exception {  
+    public static List<Map<String, Object>> upload(HttpServletRequest request) throws Exception {  
   
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();  
   
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;  
         Map<String, MultipartFile> fileMap = mRequest.getFileMap();  
   
+        //上传目录
         String uploadDir = request.getSession().getServletContext()  
                 .getRealPath("/")  
                 + FileOperateUtil.UPLOADDIR;  
         File file = new File(uploadDir);  
-  
         if (!file.exists()) {  
             file.mkdir();  
         }  
@@ -132,12 +131,6 @@ public class FileOperateUtil {
             map.put(FileOperateUtil.SUFFIX, "zip");  
             map.put(FileOperateUtil.CONTENTTYPE, "application/octet-stream");  
             map.put(FileOperateUtil.CREATETIME, new Date());  
-  
-            // 自定义参数值对  
-            for (String param : params) {  
-                map.put(param, values.get(param)[i]);  
-            }  
-  
             result.add(map);  
         }  
         return result;  
