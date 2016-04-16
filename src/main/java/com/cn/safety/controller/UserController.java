@@ -51,7 +51,71 @@ public class UserController {
 		map.put("data", datetime);
 		return map;  
 	}
-	
+	/** 
+     * login 登录
+     * @param requestData 
+     * @param mode 
+     * @param response 
+     * @return 
+     * @throws IOException 
+     */  
+    @RequestMapping(value = "/login", method = RequestMethod.POST,consumes = "application/json")  
+    @ResponseBody  
+    public ResultData<User> login(@RequestBody UserRequest requestData) throws IOException {        
+        ResultData<User> resultData =new ResultData<User>();  
+        resultData.setStatus(0);  
+        resultData.setData(null);  
+        if (requestData==null) {              
+            resultData.setMessage("参数错误：没有传入参数");  
+        } else {              
+            //身份验证处理  
+            try {  
+                int i=userService.insert(requestData.getUserName());  
+                if (i==1){  
+                    resultData.setStatus(1);  
+                    resultData.setMessage("添加成功");  
+                } else {  
+                    resultData.setMessage("添加失败");  
+                }  
+            } catch (Exception e) {  
+                resultData.setMessage("添加失败:"+e.getMessage());  
+            }             
+        }  
+        return resultData;  
+    }
+    /** 
+     * logout 退出
+     * http://localhost:8080/demo2/dishescook/add 
+     * @param requestData 
+     * @param mode 
+     * @param response 
+     * @return 
+     * @throws IOException 
+     */  
+    @RequestMapping(value = "/logout", method = RequestMethod.POST,consumes = "application/json")  
+    @ResponseBody  
+    public ResultData<User> logout(@RequestBody UserRequest requestData) throws IOException {        
+        ResultData<User> resultData =new ResultData<User>();  
+        resultData.setStatus(0);  
+        resultData.setData(null);  
+        if (requestData==null) {              
+            resultData.setMessage("参数错误：没有传入参数");  
+        } else {              
+            //身份验证处理  
+            try {  
+                int i=userService.insert(requestData.getUserName());  
+                if (i==1){  
+                    resultData.setStatus(1);  
+                    resultData.setMessage("添加成功");  
+                } else {  
+                    resultData.setMessage("添加失败");  
+                }  
+            } catch (Exception e) {  
+                resultData.setMessage("添加失败:"+e.getMessage());  
+            }             
+        }  
+        return resultData;  
+    }
 	/** 
      * add  增加一个DishesCook 
      * http://localhost:8080/demo2/dishescook/add 

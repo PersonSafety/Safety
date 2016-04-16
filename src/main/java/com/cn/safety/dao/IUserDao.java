@@ -18,6 +18,8 @@ public interface IUserDao {
     int insertSelective(User record);
 
     User selectByPrimaryKey(Integer id);
+    
+    User selectUser(String userid,String pwd);
 
     HashMap<String,Object> selectUserHome(String userid);
     

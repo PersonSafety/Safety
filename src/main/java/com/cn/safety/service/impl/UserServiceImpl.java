@@ -29,5 +29,20 @@ public class UserServiceImpl implements IUserService {
 		int i = this.userDao.insert(user);
 		return i;
 	}
+	@Override
+	public int login(String userid, String pwd) {
+		// TODO Auto-generated method stub
+		User user = userDao.selectUser(userid,pwd);
+		if(user != null){
+			return 1;
+		}else{
+			return 0;
+		}
+	}
+	@Override
+	public int logout(String userid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }
