@@ -11,4 +11,8 @@
   <select id="selectSeedUrls" resultType="String">
     select url from t_safety_crawl_seed_urls
   </select>
+  
+  <select id="selectNews" resultType="hashmap" parameterType="String" >
+    select * from t_safety_news where region = #{region}
+  </select>
 </mapper>

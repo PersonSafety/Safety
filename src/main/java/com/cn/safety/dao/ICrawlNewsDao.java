@@ -1,6 +1,7 @@
 package com.cn.safety.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.cn.safety.pojo.CrawlNews;
 
@@ -13,4 +14,6 @@ public interface ICrawlNewsDao {
 
 	int insert(CrawlNews record);
 	List<String> selectSeedUrls();
+	
+	List<Map<String,Object>> getNews(String region,Integer page);
 }

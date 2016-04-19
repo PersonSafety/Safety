@@ -1,5 +1,8 @@
 package com.cn.safety.service.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +20,11 @@ public class CrawlNewsServiceImpl  implements ICrawlNewsService{
 		// TODO Auto-generated method stub
 		int i = crawlNewsDao.insert(news);
 		return i;
+	}
+	@Override
+	public List<Map<String, Object>> getNews(String region, Integer page) {
+		List<Map<String,Object>> contacts = this.crawlNewsDao.getNews(region,page);
+		return contacts;
 	}
 
 }
