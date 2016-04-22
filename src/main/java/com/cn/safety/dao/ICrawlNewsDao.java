@@ -15,5 +15,5 @@ public interface ICrawlNewsDao {
 	int insert(CrawlNews record);
 	List<String> selectSeedUrls();
 	
-	List<Map<String,Object>> getNews(String region,Integer page);
+	List<Map<String,Object>> getNews(Map<String,Object> map);
 }

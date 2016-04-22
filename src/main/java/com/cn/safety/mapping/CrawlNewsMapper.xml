@@ -12,7 +12,7 @@
     select url from t_safety_crawl_seed_urls
   </select>
   
-  <select id="selectNews" resultType="hashmap" parameterType="String" >
-    select * from t_safety_news where region = #{region}
+  <select id="getNews" resultType="hashmap" parameterType="map" >
+    select * from t_safety_crawl_news where region = #{region} limit #{startRow},#{pageRows}
   </select>
 </mapper>

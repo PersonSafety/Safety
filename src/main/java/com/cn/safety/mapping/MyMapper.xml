@@ -2,8 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cn.safety.dao.IMyDao" >
 
-  <select id="selectContacts" resultType="hashmap" parameterType="String" >
+  <select id="getContacts" resultType="hashmap" parameterType="String" >
     select * from t_safety_user_contact where userid = #{userid}
   </select>
   
+  <insert id="addContact" parameterType="String" >
+    insert into t_safety_user_contact (userid, contactTel, contactName)
+    values (#{userid}, #{contactTel}, #{contactName})
+  </insert>
 </mapper>

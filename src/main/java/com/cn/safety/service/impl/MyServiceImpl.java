@@ -27,4 +27,10 @@ public class MyServiceImpl implements IMyService {
 		return contacts;
 	}
 
+	@Override
+	public int addContact(String userId, String contactTel, String contactName) {
+		int i = this.myDao.addContact(userId, contactTel, contactName);
+		return i;
+	}
+
 }

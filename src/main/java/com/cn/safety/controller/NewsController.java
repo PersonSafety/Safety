@@ -22,6 +22,7 @@ import com.cn.safety.model.UserRequest;
 import com.cn.safety.pojo.User;
 import com.cn.safety.service.ICrawlNewsService;
 import com.cn.safety.service.IUserService;
+import com.cn.safety.utils.Constant;
 import com.cn.safety.webMagic.NewsCrawler;
 /**
  * 新闻控制器
@@ -62,19 +63,20 @@ public class NewsController {
         resultData.setStatus(0);  
         resultData.setData(null);  
         if (region == null || page == null) {
-            resultData.setMessage("参数错误：没有传入参数");  
-        } else {              
+            resultData.setMessage(Constant.Null_Param_Error);  
+        } else {
             try {
             	List<Map<String,Object>> news = newsService.getNews(region,page);
             	if(CollectionUtils.isEmpty(news)){
             		resultData.setMessage("无记录");  
             	}else{
+            		resultData.setStatus(1);
             		resultData.setData(news);
             	}
-            } catch (Exception e) {  
-                resultData.setMessage("添加失败:"+e.getMessage());  
-            }             
-        }  
-        return resultData;  
+            } catch (Exception e) {
+                resultData.setMessage("获取新闻列表出错:"+e.getMessage());  
+            }
+        }
+        return resultData;
     }
 }

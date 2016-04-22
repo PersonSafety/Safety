@@ -12,19 +12,14 @@ import com.cn.safety.dao.IMyDao;
 import com.cn.safety.dao.ISafeDao;
 import com.cn.safety.dao.IUserDao;
 import com.cn.safety.pojo.User;
+import com.cn.safety.service.IHelpService;
 import com.cn.safety.service.IMyService;
 import com.cn.safety.service.ISafeService;
 import com.cn.safety.service.IUserService;
 
 @Service("helpService")
-public class HelpServiceImpl implements IMyService {
+public class HelpServiceImpl implements IHelpService {
 	@Resource
 	private IMyDao myDao;
 	
-	@Override
-	public List<Map<String, Object>> getContacts(String userId) {
-		List<Map<String,Object>> contacts = this.myDao.getContacts(userId);
-		return contacts;
-	}
-
 }

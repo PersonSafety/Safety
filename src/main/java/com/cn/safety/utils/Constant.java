@@ -6,7 +6,12 @@ package com.cn.safety.utils;
  */
 public class Constant {
 
+	public static final String Null_Param_Error = "参数错误：没有传入参数";
+	
 	public static final String df1= "yyyy-MM-dd HH:mm:ss";
+	/**
+	 * 抓取新闻种子url
+	 */
 	public static final String URL_legaldaily_seed = "http://www.legaldaily.com.cn/legal_case/node_33834.htm";//种子url
 	public static final String URL_legaldaily_list = "http://www.legaldaily.com.cn\\/legal_case(.*)";//包括新闻list的url
 	public static final String URL_legaldaily_content = "(http://www.legaldaily.com.cn/legal_case/content(.*))";//内容详情页，注意正则表达式要用（）括起来。
