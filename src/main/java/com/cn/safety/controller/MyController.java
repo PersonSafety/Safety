@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,8 @@ import com.cn.safety.utils.Constant;
  * @author tech
  *
  */
+@Controller
+@RequestMapping("/my")
 public class MyController {
 	@Resource
 	private IMyService myService;
@@ -89,8 +92,51 @@ public class MyController {
             	}
             }catch (Exception e) {  
                 resultData.setMessage("getContacts失败:"+e.getMessage());  
-            }             
+            }
+        }
+        return resultData;
+	}
+	
+	/**
+	 * 得到“我的”tab中安全小时，帮助次数等信息
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/getMyData", method = RequestMethod.GET)
+	@ResponseBody
+	public ResultData<Map<String,Object>> getMyData(@RequestParam("userid") String userid)throws IOException {
+		ResultData<Map<String,Object>> resultData =new ResultData<Map<String,Object>>();
+		resultData.setStatus(0);
+        resultData.setData(null);
+        if (userid == null) {
+            resultData.setMessage(Constant.Null_Param_Error);
+        } else {
+            try {
+            	Map<String,Object> myData = new HashMap<String,Object>();
+            	myData.put("yesterdayHours", "");//昨日安全小时数
+            	myData.put("yearHours", "");//全年安全小时数
+            	myData.put("getHelpTimes", "");//获得帮助次数
+            	myData.put("broadcastTimes", "");//安全广播次数
+            	myData.put("helpPersonNo", "");//累计帮助人数
+            	resultData.setStatus(1);
+            	resultData.setData(myData);
+            }catch (Exception e) {
+                resultData.setMessage("getMyData失败:"+e.getMessage());
+            }
         }
         return resultData;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

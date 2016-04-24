@@ -1,7 +1,7 @@
 package com.cn.safety.utils;
 /**
  * 分页bean
- * @author huangtq
+ * @author tech
  *
  */
 public class Pagination {
