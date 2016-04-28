@@ -55,17 +55,17 @@ public class FileOperateController {
      * @return 
      * @throws Exception 
      */  
-    @RequestMapping(value = "/upload")  
+    @RequestMapping(value = "/upload")
     @ResponseBody
-    public ResultData<Map<String,Object>> upload(HttpServletRequest request) throws Exception {  
+    public ResultData<Map<String,Object>> upload(HttpServletRequest request) throws Exception {
   
     	ResultData<Map<String,Object>> resultData =new ResultData<Map<String,Object>>();
-        resultData.setStatus(0);  
+        resultData.setStatus(0);
         resultData.setData(null);
-        Map<String, Object> map = new HashMap<String, Object>();  
+        Map<String, Object> map = new HashMap<String, Object>();
   
-        List<Map<String, Object>> result = FileOperateUtil.upload(request);  
-        map.put("result", result);  
+        List<Map<String, Object>> result = FileOperateUtil.upload(request);
+        map.put("result", result);
 
         resultData.setMessage("上传成功");
         resultData.setData(map);
